@@ -1,6 +1,8 @@
 import asyncio, os
 from langfuse import get_client
 
+import openlit
+
 from semantic_kernel import Kernel
 from semantic_kernel.connectors.ai.function_choice_behavior import FunctionChoiceBehavior
 from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
@@ -18,6 +20,11 @@ if langfuse.auth_check():
     print("Langfuse client is authenticated and ready!")
 else:
     print("Authentication failed. Please check your credentials and host.")
+
+
+# Initialize OpenLIT instrumentation. The disable_batch flag is set to true to process traces immediately. 
+# Also set the langfuse tracer to use the langfuse tracer.
+openlit.init(tracer=langfuse._otel_tracer, disable_batch=True)
 
 class BookingPlugin:
     @kernel_function(
